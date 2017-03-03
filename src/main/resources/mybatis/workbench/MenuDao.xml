@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.duxact.pm.biz.workbench.dao.MenuDao">
+	
+    <select id="getMyMenus" parameterType="String" resultType="com.duxact.pm.biz.workbench.entity.MenuVo">
+        select
+			m.id, m.menuName, m.englishName, m.parentMenuId, m.url, 
+			m.`level`, m.`order`, m.createdTime, m.status, m.comments
+		from
+			menu m,
+			rolemenu rm,
+			userinfo u
+		where
+			m.id = rm.menuId
+			and u.roleId = rm.roleId
+			and u.umCode = #{umCode}
+    </select>
+
+</mapper>

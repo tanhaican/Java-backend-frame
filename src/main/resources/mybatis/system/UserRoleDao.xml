@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.duxact.pm.biz.system.dao.UserRoleDao">
+
+    <insert id="createUserRole" parameterType="UserRole">
+        INSERT INTO userrole
+		(roleName, comment, status, `order`, isSysLevel)
+		VALUES(#{roleName}, #{comment}, 1, #{order}, #{isSysLevel})
+    </insert>
+
+    <update id="updateUserRole" parameterType="UserRole">
+        UPDATE userrole
+		SET roleName=#{roleName}, comment=#{comment}, status=#{status}, 
+		`order`=#{order}, isSysLevel=#{isSysLevel}
+		WHERE roleId=#{roleId}
+    </update>
+
+    <delete id="deleteUserRole" parameterType="Long">
+        DELETE FROM userrole
+		WHERE roleId=#{roleId}
+    </delete>
+
+    <select id="findOne" parameterType="Long" resultType="UserRole">
+        SELECT roleId, roleName, comment, status, `order`, isSysLevel 
+        FROM userrole WHERE roleId=#{roleId}
+    </select>
+
+    <select id="findAll" resultType="UserRole">
+        SELECT roleId, roleName, comment, status, `order`, isSysLevel 
+        FROM userrole WHERE 1 = 1
+    </select>
+    
+    <select id="findByRoleName" parameterType="String" resultType="UserRole">
+        SELECT roleId, roleName, comment, status, `order`, isSysLevel 
+        FROM userrole WHERE roleName like #{roleName}
+    </select>
+    
+    <select id="findSome" parameterType="UserRole" resultType="UserRole">
+        SELECT roleId, roleName, comment, status, `order`, isSysLevel 
+        FROM userrole WHERE 1 = 1
+		<if test="roleId != null">
+		and roleId=#{roleId}  
+		</if>
+		<if test="roleName != null and roleName != ''">
+		and roleName=#{roleName}  
+		</if>
+		<if test="comment != null and comment != ''">
+		and comment=#{comment}  
+		</if>
+		<if test="status != null">
+		and status=#{status}  
+		</if>
+		<if test="order != null">
+		and order=#{order}  
+		</if>
+		<if test="isSysLevel != null">
+		and isSysLevel=#{isSysLevel}  
+		</if>
+    </select>
+
+</mapper>

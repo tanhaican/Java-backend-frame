@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.duxact.pm.biz.system.dao.UserInfoDao">
+	
+    <insert id="add" parameterType="UserInfo">
+        INSERT INTO userinfo
+		(createdBy, updatedBy, umCode, userName, email, sex, birthday, phone, `level`, 
+		state, roleId, password, salt, locked)
+		VALUES(#{createdBy}, #{updatedBy}, #{umCode}, #{userName}, #{email}, #{sex}, #{birthday}, #{phone}, #{level}, 
+		#{state}, #{roleId}, #{password}, #{salt}, FALSE)
+    </insert>
+
+    <delete id="delete" parameterType="Integer">
+        DELETE FROM userinfo WHERE id = #{id}
+    </delete>
+    
+    <delete id="deleteByUm" parameterType="String">
+        DELETE FROM userinfo WHERE umCode = #{umCode}
+    </delete>
+    
+    <update id="update" parameterType="UserInfo">
+        UPDATE userinfo
+		SET updatedDate=CURRENT_TIMESTAMP, updatedBy=#{updatedBy}, umCode=#{umCode}, userName=#{userName}, 
+		email=#{email}, sex=#{sex}, birthday=#{birthday}, phone=#{phone}, `level`=#{level}, state=#{state}, 
+		roleId=#{roleId}, password=#{password}, salt=#{salt}, locked=#{locked}
+		WHERE 1 = 1
+		<if test="id != null">
+		and id=#{id}  
+		</if>
+		<if test="umCode != null and umCode != ''">
+		and umCode=#{umCode}  
+		</if>
+    </update>
+
+    <update id="updatePassword" parameterType="UserInfo">
+        UPDATE userinfo
+		SET updatedDate=CURRENT_TIMESTAMP, updatedBy=#{updatedBy}, password=#{password}
+		WHERE 1 = 1
+		<if test="id != null">
+		and id=#{id}  
+		</if>
+		<if test="umCode != null and umCode != ''">
+		and umCode=#{umCode}  
+		</if>
+    </update>
+    
+    <select id="findById" parameterType="Integer" resultType="UserInfo">
+        SELECT id, createdDate, createdBy, updatedDate, updatedBy, umCode, userName, email, 
+        sex, birthday, phone, `level`, state, roleId, password, salt, locked
+		FROM userinfo
+		WHERE
+		id=#{id}  
+    </select>
+    
+    <select id="findByUm" parameterType="String" resultType="UserInfo">
+        SELECT id, createdDate, createdBy, updatedDate, updatedBy, umCode, userName, email, 
+        sex, birthday, phone, `level`, state, roleId, password, salt, locked
+		FROM userinfo
+		WHERE
+		umCode=#{umCode}
+    </select>
+    
+    <select id="findByUmAndPassword" parameterType="UserInfo" resultType="com.duxact.pm.entity.UserInfo">
+        SELECT id, createdDate, createdBy, updatedDate, updatedBy, umCode, userName, email, 
+        sex, birthday, phone, `level`, state, roleId, password, salt, locked
+		FROM userinfo
+		WHERE
+		umCode=#{umCode} and password=#{password}
+    </select>
+    
+    <select id="findByUserName" parameterType="String" resultType="UserInfo">
+        SELECT id, createdDate, createdBy, updatedDate, updatedBy, umCode, userName, email, 
+        sex, birthday, phone, `level`, state, roleId, password, salt, locked
+		FROM userinfo
+		WHERE
+		userName like #{userName}  
+    </select>
+
+    <select id="findAll" resultType="UserInfo">
+        SELECT id, createdDate, createdBy, updatedDate, updatedBy, umCode, userName, email, 
+        sex, birthday, phone, `level`, state, roleId, password, salt, locked
+		FROM userinfo
+		WHERE userName != 'admin'
+    </select>
+
+</mapper>
